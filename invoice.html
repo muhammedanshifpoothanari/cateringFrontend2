@@ -257,7 +257,7 @@ const tableBody = $('#invoiceTableBody');
     function openWhatsApp() {
      var phoneNumber = waatSappPhone; 
      var currentDate = "<%= formatDate(new Date()) %>";
-     var message = "Hello from *Catering service*! Your Invoice:" +`catering.store/invoice/${objId}`
+     var message = "Hello from *Catering service*! Your Invoice: <a href='http://51.20.83.134:3003/invoice/${objId}'>http://51.20.83.134:3003/invoice/${objId}</a>";
    
      var whatsappURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
      window.open(whatsappURL, "_blank");
