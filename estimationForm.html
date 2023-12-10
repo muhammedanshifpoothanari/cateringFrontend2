@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering Service Estimation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4e73df;
+        }
+
+        button {
+            font-size: 16px;
+            margin: 10px;
+            background-color: #4e73df;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #375aa0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #estimationResult {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2 class="mt-4">Catering Service Estimation Form</h2>
+
+
+
+        <h4>Customer Details</h4>
+      <form action="/order" method="post">
+        <input type="text" id="companyName" name="companyName" value="Catering Company" hidden>
+
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" name="customerName" required>
+
+        <label for="streetAddress">street Address:</label>
+        <input type="text" id="streetAddress" name="streetAddress" required>
+
+        <label for="city">city:</label>
+        <input type="text" id="city" name="city" required>
+
+        <label for="zip">zip</label>
+        <input type="number" id="zip" name="zip" required>
+
+        <label for="phone">phone</label>
+        <input type="number" id="phone" name="phone" required>
+
+
+        <label for="emailAddress">Email Address</label>
+        <input type="text" id="emailAddress" name="emailAddress" required>
+
+
+
+      
+        <h4>Estimation Details</h4>
+        <label for="peopleCount">Estimated Amount of People:</label>
+        <input type="number" id="peopleCount" name="peopleCount" required>
+        
+
+        <label for="functionType">Function Type:</label>
+        <select id="functionType" name="functionType" required>
+            <option value="marriage">Marriage</option>
+            <option value="birthday">Birthday Function</option>
+            <option value="anniversary">Anniversary</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <!-- Item Details -->
+        <hr>
+<h4>Item Details</h4>
+
+<!-- <button class="btn btn-primary mt-3" id="dataEntryButton" onclick="addItem()">Add Item Type</button> -->
+
+<script>
+    
+</script>
+<label for="itemName">Item Name:</label>
+
+<input type="text" id="itemName" name="itemName" required>
+
+<label for="itemQuantity">Quantity of Item:</label>
+<input type="number" id="itemQuantity" name="itemQuantity" required>
+
+<label for="itemType">Item Type:</label>
+
+<select id="itemType" name="itemType" required>
+</select>
+
+
+<script>
+    // Fetch data from the server
+    $.get('/stockTableData', function(data) {
+        const message = data.message;
+        console.log(message);
+
+        const itemTypeDropdown = $('#itemType');
+        const itemPriceInput = $('#itemPriceForSelected');
+        itemPriceInput.val('');
+        // Function to update the item type options based on the selected item name
+        function updateItemTypeOptions(selectedItemName) {
+            // Clear existing options
+            itemTypeDropdown.empty();
+            console.log('selectedItemNamerefertter!!!!!!!',selectedItemName,'selectedItemName');
+
+            // Find the selected item in the data
+            const selectedItem = message.find(item => item.itemName === selectedItemName);
+            console.log(selectedItem);
+            // Populate item type options if the selected item is found
+            if (selectedItem) {
+                selectedItem.items.forEach(itemType => {
+                    console.log('11111');
+            
+                    itemTypeDropdown.append($('<option>').val(itemType.itemTypes).text(itemType.itemTypes));
+                });
+            } else {
+                // Add a default option if the selected item is not found
+                itemTypeDropdown.append($('<option>').val('').text('Select Item Type'));
+            }
+        }
+
+        // Attach an event listener to the item name input
+        $('#itemName').on('input', function() {
+            const selectedItemName = $(this).val();
+            const selectedItemType = $('#itemType').val();
+
+            console.log('selectedItemName',selectedItemName,'selectedItemName');
+            updateItemTypeOptions(selectedItemName);
+        });
+    });
+</script>
+<label for="itemPrice">Price per Item:</label>
+<input type="number" id="itemPriceForSelected" name="itemPriceForSelected" required>
+<button type="submit">Place An Order</button>
+<input type="number" id="estimationResultForPartyInput" name="total" hidden>
+
+</form>
+<script>
+     $.get('/stockTableData', function(data) {
+        const message = data.message;
+        console.log(message);
+
+        const itemTypeDropdown = $('#itemType');
+        const itemPriceInput = $('#itemPriceForSelected');
+        itemPriceInput.val('');
+
+        function updatePrice(selectedItemName, selectedItemType) {
+            // Find the selected item in the data
+            const selectedItem = message.find(item => item.itemName === selectedItemName);
+
+            // Update the price if the selected item and type are found
+            if (selectedItem) {
+                const selectedType = selectedItem.items.find(item => item.itemTypes === selectedItemType);
+                if (selectedType) {
+                    const price = selectedType.itemPrice || '';
+                    itemPriceInput.val(price);
+                } else {
+                    // Clear the price if the selected type is not found
+                    itemPriceInput.val('');
+                }
+            } else {
+                // Clear the price if the selected item is not found
+                itemPriceInput.val('');
+            }
+        }
+        $('#itemType').on('change', function() {
+            const selectedItemName = $('#itemName').val();
+            const selectedItemType = $(this).val();
+            updatePrice(selectedItemName, selectedItemType);
+        });
+    })
+</script>
+        <!-- Estimation Button -->
+        <button class="btn btn-primary mt-3" onclick="performEstimation()">Estimation</button>
+
+        <!-- Estimation Result -->
+        <div class="mt-4" id="estimationResultForParty"></div>
+
+    <!-- Bootstrap JS and jQuery (required for Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function performEstimation() {
+            // Get estimation input values
+            var peopleCount = parseInt(document.getElementById("peopleCount").value);
+            var functionType = document.getElementById("functionType").value;
+
+            // Get item values
+            var itemName = document.getElementById("itemName").value;
+            var itemQuantity = parseInt(document.getElementById("itemQuantity").value);
+            var itemType = document.getElementById("itemType").value;
+            var itemPrice = parseFloat(document.getElementById("itemPriceForSelected").value);
+
+            // Calculate estimated cost based on input values and item values
+            var estimatedCost = calculateEstimation(peopleCount, functionType, itemQuantity, itemPrice);
+
+            // Display estimation result
+            document.getElementById("estimationResultForPartyInput").value = estimatedCost.toFixed(2);
+            document.getElementById("estimationResultForParty").innerHTML = "Estimated Cost: &#8377;" + estimatedCost.toFixed(2);
+        }
+
+        // Sample calculation function (replace this with your actual logic)
+        function calculateEstimation(peopleCount, functionType, itemQuantity, itemPrice) {
+            // Replace this logic with your actual estimation calculation
+            return peopleCount * itemQuantity * itemPrice;
+        }
+    </script>
+
+</body>
+
+</html>

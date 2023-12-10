@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering Service Estimation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4e73df;
+        }
+
+        button {
+            font-size: 16px;
+            margin: 10px;
+            background-color: #4e73df;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #375aa0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #estimationResult {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2 class="mt-4">Catering Service Estimation App</h2>
+
+        <!-- Estimation Inputs -->
+        <label for="peopleCount">Estimated Amount of People:</label>
+        <input type="number" id="peopleCount" required>
+
+        <label for="functionType">Function Type:</label>
+        <select id="functionType" required>
+            <option value="marriage">Marriage</option>
+            <option value="birthday">Birthday Function</option>
+            <option value="anniversary">Anniversary</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <!-- Item Details -->
+        <hr>
+        <h4>Item Details</h4>
+
+        <label for="itemName">Item Name:</label>
+        <input type="text" id="itemName" required>
+
+        <label for="itemQuantity">Quantity of Item:</label>
+        <input type="number" id="itemQuantity" required>
+
+        <label for="itemType">Item Type:</label>
+        <select id="itemType" required>
+            <option value="starter">Starter</option>
+            <option value="mainCourse">Main Course</option>
+            <option value="dessert">Dessert</option>
+            <option value="drinks">Drinks</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="itemPrice">Price per Item:</label>
+        <input type="number" id="itemPrice" required>
+
+        <!-- Estimation Button -->
+        <button class="btn btn-primary mt-3" onclick="performEstimation()">Estimation</button>
+
+        <!-- Estimation Result -->
+        <div class="mt-4" id="estimationResult"></div>
+
+    </div>
+
+    <!-- Bootstrap JS and jQuery (required for Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function performEstimation() {
+            // Get estimation input values
+            var peopleCount = parseInt(document.getElementById("peopleCount").value);
+            var functionType = document.getElementById("functionType").value;
+
+            // Get item values
+            var itemName = document.getElementById("itemName").value;
+            var itemQuantity = parseInt(document.getElementById("itemQuantity").value);
+            var itemType = document.getElementById("itemType").value;
+            var itemPrice = parseFloat(document.getElementById("itemPrice").value);
+
+            // Calculate estimated cost based on input values and item values
+            var estimatedCost = calculateEstimation(peopleCount, functionType, itemQuantity, itemPrice);
+
+            // Display estimation result
+            document.getElementById("estimationResult").innerHTML = "Estimated Cost: $" + estimatedCost.toFixed(2);
+        }
+
+        // Sample calculation function (replace this with your actual logic)
+        function calculateEstimation(peopleCount, functionType, itemQuantity, itemPrice) {
+            // Replace this logic with your actual estimation calculation
+            return peopleCount * itemQuantity * itemPrice;
+        }
+    </script>
+
+</body>
+
+</html>

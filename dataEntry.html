@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering Service Estimation App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #4e73df;
+        }
+
+        button {
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        #estimationResult {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2 class="mt-4">Catering Service Data Entry</h2>
+
+        <script>
+            let items = []; 
+             $.get('/stockTableData', function (data) {
+                    const message = data.message;
+                    message.forEach(element => {
+                        items.push(element.itemName);
+                    })
+                });
+            function isItemNameExists(itemName) {
+                
+                return items.includes(itemName);
+            }
+        
+            function submitForm() {
+                console.log('reaefkjbgekhgrkg');
+                var itemNameInput = document.getElementById("itemName").value;
+                trimmedName = itemNameInput?.trim();
+                console.log(trimmedName);
+                if (trimmedName.length === 0) {
+                     Swal.fire({
+                         icon: 'error',
+                         title: 'Error',
+                         text: 'Item name cannot be empty. Please enter a valid name.',
+                     });
+                     return false;
+                 }
+
+
+                if (isItemNameExists(trimmedName)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Item name already exists. Please choose a different name.',
+                    });
+                    return false;
+                } else {
+                   return true;
+                }
+            }
+       
+        
+   
+        </script>
+
+        <form class="mt-4" id="dataEntryForm" method="post" submitForm() action="/dataEntry"  onsubmit="return submitForm()">
+            <div class="form-group">
+                <label for="itemName">Item Name:</label>
+                <input type="text" class="form-control" id="itemName" name="itemName" required>
+            </div>
+        
+            <div class="form-group" id="itemsContainer">
+                <button class="btn btn-primary mt-3" id="dataEntryButton" onclick="addItem()">Add Item Type</button>
+                <script>
+                    let counter = 0;
+        
+                    function addItem() {
+                        counter++;
+        
+                        let newFormItem = document.createElement("div");
+                        newFormItem.classList.add("form-group");
+        
+                        newFormItem.innerHTML = `
+                            <label for="itemType${counter}">Item Type ${counter}:</label>
+                            <input type="text" class="form-control" name="itemTypes${counter}" required>
+                            <label for="itemPrice${counter}">Item Price ${counter}:</label>
+                            <input type="text" class="form-control" name="itemPrices${counter}" required>
+                        `;
+                        document.getElementById("itemsContainer").appendChild(newFormItem);
+                    }
+                </script>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        
+        
+   
+        
+        
+        
+        <div class="mt-4" id="estimationResult"></div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function showDataEntryForm() {
+            document.getElementById("dataEntryForm").style.display = "block";
+        }
+
+        function submitDataEntry() {
+            var itemName = document.getElementById("itemName").value;
+            var itemType = document.getElementById("itemType").value;
+            var itemPrice = parseFloat(document.getElementById("itemPrice").value);
+
+            // Create an object to hold the data
+            var entryData = {
+                itemName: itemName,
+                itemType: itemType,
+                itemPrice: itemPrice
+            };
+
+            // Convert the object to a JSON string and store it in localStorage
+            localStorage.setItem("entryData", JSON.stringify(entryData));
+
+            // Redirect to tables.html
+            window.location.href = "tables.html";
+        }
+    </script>
+
+</body>
+
+</html>
