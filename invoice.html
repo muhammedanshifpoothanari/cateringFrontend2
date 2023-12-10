@@ -258,7 +258,6 @@ const tableBody = $('#invoiceTableBody');
      var phoneNumber = waatSappPhone; 
      var currentDate = "<%= formatDate(new Date()) %>";
      var message = "Hello from *Catering service*! Your Invoice:" +`facebook.in/invoice/${objId}`
-   
      var whatsappURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
      window.open(whatsappURL, "_blank");
    }
