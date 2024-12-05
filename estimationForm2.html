@@ -172,15 +172,25 @@
                  
                             <label for="itemQuantity_${index}">Quantity of Item:</label>
                             <input type="number" id="itemQuantity_${index}" name="itemQuantity_${index}" required>
-            
+
+                            <label for="itemUnit_${index}">Choose item Unit:</label>
+                            <select id="itemUnit_${index}" name="itemUnit_${index}" required>
+                                <option value="glass">glass 🥂</option>
+                                <option value="plate">plate 🍛</option>
+                                <option value="rupees">rupees ₹</option>
+                            </select>  
+
                             <label for="itemType_${index}">Item Type:</label>
-                            <select id="itemType_${index}" name="itemType_${index}" required></select>
+                            <input type="text" id="itemType_${index}" name="itemType_${index}" required>
+
                             <label for="itemPrice_${index}">Price per Item:</label>
                             <input type="number" id="itemPriceForSelected_${index}" name="itemPriceForSelected_${index}" required>
      
                         </div>
                     `);
                   
+                                        // <select id="itemType_${index}" name="itemType_${index}" required></select>
+
                     const newScript = document.createElement('script');
     newScript.innerHTML = `
     // Fetch data from the server
@@ -397,6 +407,8 @@
         let itemQuantityElement = document.getElementById(`itemQuantity_${index}`);
         let itemPriceElement = document.getElementById(`itemPriceForSelected_${index}`);
 
+        // let itemUnitElement = document.getElementById(`itemUnit_${index}`);
+
         let itemQuantity = parseInt(itemQuantityElement.value); 
         console.log('itemQuantity:', itemQuantity);
 
@@ -410,12 +422,16 @@
         itemDetails.push({
             itemName: document.getElementById(`itemName_${index}`).value,
             itemQuantity: itemQuantity,
-            itemPrice: itemPrice
+            itemType: document.getElementById(`itemType_${index}`)?.value || "",
+            itemPrice: itemPrice,
+            itemUnit:document.getElementById(`itemUnit_${index}`).value
         });
         itemsToSendBackend.push({
             itemName: document.getElementById(`itemName_${index}`).value,
             itemQuantity: itemQuantity,
-            itemPrice: itemPrice
+            itemType: document.getElementById(`itemType_${index}`)?.value || "",
+            itemPrice: itemPrice,
+            itemUnit:document.getElementById(`itemUnit_${index}`).value
         });
     });
 
@@ -442,7 +458,7 @@
     // Sample calculation function (replace this with your actual logic)
     function calculateEstimation(peopleCount, functionType,totalItemSubTotal) {
         // Replace this logic with your actual estimation calculation
-        return peopleCount * totalItemSubTotal;
+        return  totalItemSubTotal;
     }
 </script>
 
